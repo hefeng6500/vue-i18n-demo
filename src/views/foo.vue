@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   i18n: {
     messages: {
@@ -20,6 +21,12 @@ export default {
       },
     },
   },
+  mounted(){
+    axios({
+      url: '/api',
+      method: 'GET'
+    })
+  }
 };
 </script>
 

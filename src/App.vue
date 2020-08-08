@@ -1,40 +1,55 @@
 <template>
   <div id="app">
     <div class="locale-changer">
-      <select v-model="localLang">
-        <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">{{
-          lang
-        }}</option>
+      <select v-model="currentLang">
+        <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+          {{ lang }}
+        </option>
       </select>
     </div>
     <hr />
     <p>{{ $t("message.hello") }}</p>
     <p>{{ $t("message.test") }}</p>
     <hr />
-    <router-link to="/foo">foo</router-link>
-    <router-link to="/bar">bar</router-link>
+    <a-button type="primary">
+      <router-link to="/foo">foo</router-link>
+    </a-button>
+    <a-button type="primary">
+      <router-link to="/bar">bar</router-link>
+    </a-button>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
+import { Button } from "ant-design-vue";
+
 export default {
   name: "App",
-  components: {},
+  components: {
+    AButton: Button,
+  },
   data() {
     return {
-      localLang: "en_US",
+      currentLang: "",
       langs: ["zh_CN", "en_US"],
     };
   },
   watch: {
-    localLang: {
-      handler(val) {
-        this.$i18n.locale = val
-        localStorage.setItem("lang", val);
-      },
-      immediate: true,
+    currentLang(val) {
+      this.mergeI18nLocal(val);
     },
+  },
+  computed: {
+    ...mapState(["locale"]),
+  },
+  mounted() {
+    console.log(this.locale);
+    this.currentLang = this.locale;
+  },
+  methods: {
+    ...mapMutations(["mergeI18nLocal"]),
   },
   i18n: {
     // `i18n` 选项，为组件设置语言环境信息
