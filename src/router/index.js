@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Foo from '../views/foo'
 import Bar from '../views/bar'
 import { loadLanguageAsync } from '../i18n'
+import store from '../store'
+
 
 Vue.use(VueRouter)
 
@@ -17,8 +19,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const lang = localStorage.getItem('lang')
+  const lang = store.state.locale
   loadLanguageAsync(lang).then(() => next())
 })
+
 
 export default router
